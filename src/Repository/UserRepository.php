@@ -3,8 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -12,8 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserRepository extends ServiceEntityRepository
-{
+class UserRepository extends ServiceEntityRepository {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
@@ -23,8 +22,7 @@ class UserRepository extends ServiceEntityRepository
     //  * @return User[] Returns an array of User objects
     //  */
     /*
-    public function findByExampleField($value)
-    {
+    public function findByExampleField($value) {
         return $this->createQueryBuilder('u')
             ->andWhere('u.exampleField = :val')
             ->setParameter('val', $value)
@@ -37,8 +35,7 @@ class UserRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?User
-    {
+    public function findOneBySomeField($value): ?User {
         return $this->createQueryBuilder('u')
             ->andWhere('u.exampleField = :val')
             ->setParameter('val', $value)
