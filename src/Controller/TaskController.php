@@ -4,22 +4,26 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Form\TaskType;
+use App\Repository\TaskRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class TaskController extends Controller {
+class TaskController extends AbstractController {
     /**
      * @Route("/tasks", name="task_list")
      */
-    public function listAction() {
-        return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findAll()]);
+    public function listAction(TaskRepository $taskRepository): Response {
+        return $this->render('task/list.html.twig', [
+            'tasks' => $taskRepository->findAll()
+        ]);
     }
 
     /**
      * @Route("/tasks/create", name="task_create")
      */
-    public function createAction(Request $request) {
+    public function createAction(Request $request): Response {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
 
@@ -42,7 +46,7 @@ class TaskController extends Controller {
     /**
      * @Route("/tasks/{id}/edit", name="task_edit")
      */
-    public function editAction(Task $task, Request $request) {
+    public function editAction(Task $task, Request $request): Response {
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
@@ -64,7 +68,7 @@ class TaskController extends Controller {
     /**
      * @Route("/tasks/{id}/toggle", name="task_toggle")
      */
-    public function toggleTaskAction(Task $task) {
+    public function toggleTaskAction(Task $task): Response {
         $task->toggle(!$task->isDone());
         $this->getDoctrine()->getManager()->flush();
 
@@ -76,7 +80,7 @@ class TaskController extends Controller {
     /**
      * @Route("/tasks/{id}/delete", name="task_delete")
      */
-    public function deleteTaskAction(Task $task) {
+    public function deleteTaskAction(Task $task): Response {
         $em = $this->getDoctrine()->getManager();
         $em->remove($task);
         $em->flush();
