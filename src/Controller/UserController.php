@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserController extends AbstractController {
     /**
@@ -24,7 +24,7 @@ class UserController extends AbstractController {
     /**
      * @Route("/users/create", name="user_create")
      */
-    public function createAction(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response {
+    public function createAction(Request $request, UserPasswordHasherInterface $passwordEncoder): Response {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
 
@@ -32,7 +32,7 @@ class UserController extends AbstractController {
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $password = $passwordEncoder->encodePassword($user, $user->getPassword());
+            $password = $passwordEncoder->hashPassword($user, $user->getPassword());
             $user->setPassword($password);
 
             $em->persist($user);
@@ -49,13 +49,13 @@ class UserController extends AbstractController {
     /**
      * @Route("/users/{id}/edit", name="user_edit")
      */
-    public function editAction(User $user, Request $request, UserPasswordEncoderInterface $passwordEncoder): Response {
+    public function editAction(User $user, Request $request, UserPasswordHasherInterface $passwordEncoder): Response {
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $passwordEncoder->encodePassword($user, $user->getPassword());
+            $password = $passwordEncoder->hashPassword($user, $user->getPassword());
             $user->setPassword($password);
 
             $this->getDoctrine()->getManager()->flush();

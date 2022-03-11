@@ -1,6 +1,6 @@
 {
-    "composer/package-versions-deprecated": {
-        "version": "1.11.99.5"
+    "behat/transliterator": {
+        "version": "v1.3.0"
     },
     "doctrine/annotations": {
         "version": "1.13",
@@ -84,20 +84,26 @@
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.7"
     },
+    "gedmo/doctrine-extensions": {
+        "version": "v3.5.0"
+    },
     "laminas/laminas-code": {
         "version": "3.4.1"
-    },
-    "laminas/laminas-eventmanager": {
-        "version": "3.2.1"
-    },
-    "laminas/laminas-zendframework-bridge": {
-        "version": "1.1.1"
     },
     "monolog/monolog": {
         "version": "2.3.5"
     },
     "nikic/php-parser": {
         "version": "v4.13.2"
+    },
+    "phpdocumentor/reflection-common": {
+        "version": "2.2.0"
+    },
+    "phpdocumentor/reflection-docblock": {
+        "version": "5.3.0"
+    },
+    "phpdocumentor/type-resolver": {
+        "version": "1.6.0"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -121,6 +127,18 @@
         },
         "files": [
             "config/packages/sensio_framework_extra.yaml"
+        ]
+    },
+    "symfony/apache-pack": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "9d254a22efca7264203eea98b866f16f944b2f09"
+        },
+        "files": [
+            "public/.htaccess"
         ]
     },
     "symfony/asset": {
@@ -221,6 +239,9 @@
             "src/Kernel.php"
         ]
     },
+    "symfony/http-client": {
+        "version": "v5.3.14"
+    },
     "symfony/http-client-contracts": {
         "version": "v1.1.11"
     },
@@ -229,9 +250,6 @@
     },
     "symfony/http-kernel": {
         "version": "v3.4.49"
-    },
-    "symfony/intl": {
-        "version": "v3.4.47"
     },
     "symfony/maker-bundle": {
         "version": "1.29",
@@ -263,6 +281,9 @@
     "symfony/options-resolver": {
         "version": "v3.4.47"
     },
+    "symfony/password-hasher": {
+        "version": "v5.3.14"
+    },
     "symfony/polyfill-intl-grapheme": {
         "version": "v1.25.0"
     },
@@ -273,9 +294,6 @@
         "version": "v1.25.0"
     },
     "symfony/polyfill-mbstring": {
-        "version": "v1.24.0"
-    },
-    "symfony/polyfill-php72": {
         "version": "v1.24.0"
     },
     "symfony/polyfill-php73": {
@@ -404,5 +422,8 @@
     },
     "twig/twig": {
         "version": "v2.14.11"
+    },
+    "webmozart/assert": {
+        "version": "1.10.0"
     }
 }
