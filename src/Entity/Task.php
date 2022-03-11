@@ -37,6 +37,12 @@ class Task {
     private $isDone = false;
 
     /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tasks")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
+    /**
      * Hook timestampable behavior
      * updates createdAt, updatedAt fields
      */
@@ -77,6 +83,16 @@ class Task {
 
     public function toggle(bool $isDone): self {
         $this->isDone = $isDone;
+
+        return $this;
+    }
+
+    public function getUser(): ?User {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self {
+        $this->user = $user;
 
         return $this;
     }
