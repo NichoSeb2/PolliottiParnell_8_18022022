@@ -1,0 +1,7 @@
+{
+	"php.validate.executablePath": "F:\\wamp64\\bin\\php\\php8.0.1\\php.exe",
+	"intelephense.diagnostics.undefinedMethods": false,
+	"cSpell.words": [
+		"Upgrader"
+	]
+}
