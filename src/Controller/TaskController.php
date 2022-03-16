@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Form\TaskType;
+use App\Security\Voter\TaskVoter;
 use App\Repository\TaskRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -83,6 +84,8 @@ class TaskController extends AbstractController {
      * @Route("/tasks/{id}/delete", name="task_delete")
      */
     public function deleteTaskAction(Task $task): Response {
+        $this->denyAccessUnlessGranted(TaskVoter::DELETE_TASK, $task);
+
         $em = $this->getDoctrine()->getManager();
         $em->remove($task);
         $em->flush();
