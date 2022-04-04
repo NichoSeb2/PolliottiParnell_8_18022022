@@ -42,7 +42,7 @@ class TaskVoter extends Voter {
     }
 
     private function canDelete(Task $task, User $user): bool {
-		if ($this->security->isGranted('ROLE_ADMIN')) {
+		if (in_array("ROLE_ANONYMOUS", $task->getUser()->getRoles()) && $this->security->isGranted("ROLE_ADMIN")) {
             return true;
         }
 
