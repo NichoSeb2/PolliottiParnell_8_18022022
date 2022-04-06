@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,14 +25,17 @@ class UserController extends AbstractController {
     /**
      * @Route("/users/create", name="user_create")
      */
-    public function createAction(Request $request, UserPasswordHasherInterface $passwordEncoder): Response {
+    public function createAction(Request $request, UserPasswordHasherInterface $passwordEncoder, EntityManagerInterface $em): Response {
         $user = new User();
+
+        // So publicly created account have roles
+        $user->setRoles(['ROLE_USER']);
+
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $password = $passwordEncoder->hashPassword($user, $user->getPassword());
             $user->setPassword($password);
 
@@ -49,7 +53,7 @@ class UserController extends AbstractController {
     /**
      * @Route("/users/{id}/edit", name="user_edit")
      */
-    public function editAction(User $user, Request $request, UserPasswordHasherInterface $passwordEncoder): Response {
+    public function editAction(User $user, Request $request, UserPasswordHasherInterface $passwordEncoder, EntityManagerInterface $em): Response {
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
@@ -58,9 +62,9 @@ class UserController extends AbstractController {
             $password = $passwordEncoder->hashPassword($user, $user->getPassword());
             $user->setPassword($password);
 
-            $this->getDoctrine()->getManager()->flush();
+            $em->flush();
 
-            $this->addFlash('success', "L'utilisateur a bien été modifié");
+            $this->addFlash('success', "L'utilisateur a bien été modifié.");
 
             return $this->redirectToRoute('user_list');
         }

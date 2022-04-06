@@ -6,8 +6,16 @@
 /public/bundles/
 /var/
 /vendor/
+/migrations/*.php
 ###< symfony/framework-bundle ###
 
 ###> ide ###
 /.vscode
+/.idea
 ###< ide ###
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+/coverage
+###< symfony/phpunit-bridge ###
