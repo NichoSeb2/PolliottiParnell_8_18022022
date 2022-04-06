@@ -104,7 +104,9 @@ class UserControllerTest extends WebTestCase {
 
         $this->client->submit($form);
 
-        //TODO: Assert form errors
+        if ($profile = $this->client->getProfile()) {
+            $this->assertEquals(2, $profile->getCollector("validator")->getViolationsCount());
+        }
     }
 
     //* editAction
