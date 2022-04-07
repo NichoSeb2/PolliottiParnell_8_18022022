@@ -115,6 +115,18 @@ class TaskControllerTest extends WebTestCase {
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
     }
 
+    public function testEditTaskWithWrongSession(): void {
+        $this->databaseTool->loadFixtures([TaskFixturesTest::class]);
+
+        $admin = $this->userRepository->findBy(['email' => "user@example.fr"])[0];
+        $this->client->loginUser($admin);
+
+        $this->client->followRedirects();
+
+        $crawler = $this->client->request('GET', '/tasks/1/edit');
+        $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
+    }
+
     public function testEditTaskWithSessionAndValidData(): void {
         $this->databaseTool->loadFixtures([TaskFixturesTest::class]);
 
@@ -150,6 +162,18 @@ class TaskControllerTest extends WebTestCase {
 
         $crawler = $this->client->request('GET', '/tasks/0/toggle');
         $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
+    }
+
+    public function testToggleTaskWithWrongSession(): void {
+        $this->databaseTool->loadFixtures([TaskFixturesTest::class]);
+
+        $admin = $this->userRepository->findBy(['email' => "user@example.fr"])[0];
+        $this->client->loginUser($admin);
+
+        $this->client->followRedirects();
+
+        $crawler = $this->client->request('GET', '/tasks/1/toggle');
+        $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
     }
 
     public function testToggleTaskWithSession(): void {
