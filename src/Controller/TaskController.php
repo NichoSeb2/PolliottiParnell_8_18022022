@@ -18,7 +18,9 @@ class TaskController extends AbstractController {
      */
     public function listAction(TaskRepository $taskRepository): Response {
         return $this->render('task/list.html.twig', [
-            'tasks' => $taskRepository->findAll()
+            'tasks' => $taskRepository->findBy([
+                "user" => $this->getUser()
+            ])
         ]);
     }
 
@@ -49,6 +51,8 @@ class TaskController extends AbstractController {
      * @Route("/tasks/{id}/edit", name="task_edit")
      */
     public function editAction(Task $task, Request $request, EntityManagerInterface $em): Response {
+        $this->denyAccessUnlessGranted(TaskVoter::EDIT_TASK, $task);
+
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
@@ -71,6 +75,8 @@ class TaskController extends AbstractController {
      * @Route("/tasks/{id}/toggle", name="task_toggle")
      */
     public function toggleTaskAction(Task $task, EntityManagerInterface $em): Response {
+        $this->denyAccessUnlessGranted(TaskVoter::EDIT_TASK, $task);
+
         $task->toggle(!$task->isDone());
         $em->flush();
 

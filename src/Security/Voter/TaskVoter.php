@@ -10,11 +10,12 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class TaskVoter extends Voter {
     const DELETE_TASK = 'delete_task';
+    const EDIT_TASK = 'edit_task';
 
 	public function __construct(private Security $security) {}
 
     protected function supports(string $attribute, $subject): bool {
-        if (!in_array($attribute, [self::DELETE_TASK])) {
+        if (!in_array($attribute, [self::DELETE_TASK, self::EDIT_TASK])) {
             return false;
         }
 
@@ -38,6 +39,8 @@ class TaskVoter extends Voter {
         switch ($attribute) {
             case self::DELETE_TASK:
                 return $this->canDelete($task, $user);
+            case self::EDIT_TASK:
+                return $this->canEdit($task, $user);
         }
     }
 
@@ -47,5 +50,9 @@ class TaskVoter extends Voter {
         }
 
 		return $task->getUser() === $user;
+    }
+
+    private function canEdit(Task $task, User $user): bool {
+        return $this->canDelete($task, $user);
     }
 }
