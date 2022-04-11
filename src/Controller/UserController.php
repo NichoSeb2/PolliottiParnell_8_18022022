@@ -54,7 +54,7 @@ class UserController extends AbstractController {
      * @Route("/users/{id}/edit", name="user_edit")
      */
     public function editAction(User $user, Request $request, UserPasswordHasherInterface $passwordEncoder, EntityManagerInterface $em): Response {
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserType::class, $user, ["new" => false]);
 
         $form->handleRequest($request);
 

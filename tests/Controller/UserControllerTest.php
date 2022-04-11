@@ -105,7 +105,7 @@ class UserControllerTest extends WebTestCase {
         $this->client->submit($form);
 
         if ($profile = $this->client->getProfile()) {
-            $this->assertEquals(2, $profile->getCollector("validator")->getViolationsCount());
+            $this->assertEquals(4, $profile->getCollector("validator")->getViolationsCount());
         }
     }
 
@@ -139,12 +139,56 @@ class UserControllerTest extends WebTestCase {
         $this->assertEquals("admin@example.fr", $form["user[email]"]->getValue());
 
         $form["user[username]"]->setValue("Test name edit");
-        $form["user[password][first]"]->setValue("8888");
-        $form["user[password][second]"]->setValue("8888");
         $form["user[email]"]->setValue("test@test.test");
 
         $this->client->submit($form);
 
         $this->assertSelectorTextContains('div[role="alert"]', "L'utilisateur a bien été modifié.");
+    }
+
+    public function testEditUserWithSessionSaveWithoutEdit(): void {
+        $this->databaseTool->loadFixtures([UserFixturesTest::class]);
+
+        $admin = $this->userRepository->findBy(['email' => "admin@example.fr"])[0];
+        $this->client->loginUser($admin);
+
+        $this->client->followRedirects();
+
+        $crawler = $this->client->request('GET', '/users/1/edit');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+
+        $form = $crawler->selectButton("Modifier")->form();
+
+        $this->assertEquals("Admin", $form["user[username]"]->getValue());
+        $this->assertEquals("admin@example.fr", $form["user[email]"]->getValue());
+
+        $this->client->submit($form);
+
+        $this->assertSelectorTextContains('div[role="alert"]', "L'utilisateur a bien été modifié.");
+    }
+
+    public function testEditUserWithSessionAndInvalidData(): void {
+        $this->databaseTool->loadFixtures([UserFixturesTest::class]);
+
+        $admin = $this->userRepository->findBy(['email' => "admin@example.fr"])[0];
+        $this->client->loginUser($admin);
+
+        $this->client->followRedirects();
+
+        $crawler = $this->client->request('GET', '/users/1/edit');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+
+        $form = $crawler->selectButton("Modifier")->form();
+
+        $this->assertEquals("Admin", $form["user[username]"]->getValue());
+        $this->assertEquals("admin@example.fr", $form["user[email]"]->getValue());
+
+        $form["user[email]"]->setValue("test");
+
+        $this->client->submit($form);
+
+        if ($profile = $this->client->getProfile()) {
+            $this->assertEquals(1, $profile->getCollector("validator")->getViolationsCount());
+        }
     }
 }
