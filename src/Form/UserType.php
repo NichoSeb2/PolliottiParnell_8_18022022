@@ -23,21 +23,34 @@ class UserType extends AbstractType {
                 'label' => "Nom d'utilisateur", 
                 'empty_data' => "",
             ])
-            ->add('password', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'invalid_message' => 'Les deux mots de passe doivent correspondre.',
-                'required' => true,
-                'first_options'  => [
-                    'label' => 'Mot de passe'
-                ],
-                'second_options' => [
-                    'label' => 'Tapez le mot de passe à nouveau'
-                ],
-            ])
             ->add('email', EmailType::class, [
                 'label' => 'Adresse email'
             ])
         ;
+
+        if ($options['new']) {
+            $builder->add('password', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'invalid_message' => 'Les deux mots de passe doivent correspondre.',
+                'required' => $options['new'],
+                'first_options'  => [
+                    'label' => 'Mot de passe',
+                    'constraints' => [
+                        new NotBlank([
+                            'message' => "Vous devez entrer un mot de passe.", 
+                        ]), 
+                    ], 
+                ],
+                'second_options' => [
+                    'label' => 'Tapez le mot de passe à nouveau',
+                    'constraints' => [
+                        new NotBlank([
+                            'message' => "Vous devez entrer une confirmation de mot de passe.", 
+                        ]), 
+                    ], 
+                ],
+            ]);
+        }
 
         if ($this->security->isGranted("ROLE_ADMIN")) {
             $builder
@@ -66,6 +79,7 @@ class UserType extends AbstractType {
     public function configureOptions(OptionsResolver $resolver): void {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'new' => true,
         ]);
     }
 }
