@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <form method="post">
+    <form method="post" class="d-flex align-items-center">
         <label for="username">Nom d'utilisateur :</label>
-        <input type="text" id="username" name="username" value="{{ last_username }}" />
+        <input type="text" id="username" name="username" value="{{ last_username }}" class="mx-1" />
 
         <label for="password">Mot de passe :</label>
-        <input type="password" id="password" name="password" />
+        <input type="password" id="password" name="password" class="mx-1" />
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-        <button class="btn btn-success" type="submit">Se connecter</button>
+        <button class="btn btn-success mx-1 py-1" type="submit">Se connecter</button>
     </form>
 
     {% if error %}
