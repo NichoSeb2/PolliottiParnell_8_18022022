@@ -40,19 +40,21 @@
 
         <!-- Page Content -->
         <div class="container p-0">
-            <div class="row mb-2">
-                <div class="col-md-12">
-                    <a href="{{ path('user_create') }}" class="btn btn-primary w-auto me-2">Créer un utilisateur</a>
+            {% block header_sub %}
+                <div class="row mb-2">
+                    <div class="col-md-12">
+                        <a href="{{ path('user_create') }}" class="btn btn-primary w-auto me-2">Créer un utilisateur</a>
 
-                    {% if app.user %}
-                        <a href="{{ path('logout') }}" class="btn btn-danger w-auto me-2">Se déconnecter</a>
-                    {% endif %}
+                        {% if app.user %}
+                            <a href="{{ path('logout') }}" class="btn btn-danger w-auto me-2">Se déconnecter</a>
+                        {% endif %}
 
-                    {% if not app.user and 'login' != app.request.attributes.get('_route') %}
-                        <a href="{{ path('login') }}" class="btn btn-success w-auto me-2">Se connecter</a>
-                    {% endif %}
+                        {% if not app.user and 'login' != app.request.attributes.get('_route') %}
+                            <a href="{{ path('login') }}" class="btn btn-success w-auto me-2">Se connecter</a>
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
+            {% endblock %}
 
             <div class="row">
                 <div class="col-md-12">
@@ -76,12 +78,6 @@
             <div class="my-2">
                 {% block body %}{% endblock %}
             </div>
-
-            {# <div class="row">
-                <div class="col-md-12 p-0">
-                    
-                </div>
-            </div> #}
         </div>
 
         <!-- /.container -->
