@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block header_title %}<h1>Erreur {{ exception.statusCode }}</h1>{% endblock %}
+{% block header_img %}{% endblock %}
+{% block header_sub %}{% endblock %}
+
+{% block body %}
+    <h2 class="my-3 text-danger">
+        {% block label_text %}
+            Une erreur est survenue
+        {% endblock %}
+    </h2>
+
+    <div class="form-group my-3">
+        <a href="{% block button_link %}{{ path('homepage') }}{% endblock %}" class="btn btn-primary text-white">
+            {% block button_text %}
+                Revenir à l'accueil
+            {% endblock %}
+        </a>
+    </div>
+{% endblock %}
