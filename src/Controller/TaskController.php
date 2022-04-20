@@ -6,6 +6,7 @@ use App\Entity\Task;
 use App\Form\TaskType;
 use App\Security\Voter\TaskVoter;
 use App\Repository\TaskRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,11 +17,24 @@ class TaskController extends AbstractController {
     /**
      * @Route("/tasks", name="task_list")
      */
-    public function listAction(TaskRepository $taskRepository): Response {
+    public function listAction(TaskRepository $taskRepository, UserRepository $userRepository): Response {
+        $user = $this->getUser();
+        $tasks = $taskRepository->findBy([
+            "user" => $this->getUser()
+        ]);
+
+        if (in_array("ROLE_ADMIN", $user->getRoles())) {
+            $anonymous = $userRepository->findOneBy([
+                "username" => "Anonyme", 
+            ]);
+
+            $tasks = $taskRepository->findBy([
+                "user" => [$this->getUser(), $anonymous], 
+            ]);
+        }
+
         return $this->render('task/list.html.twig', [
-            'tasks' => $taskRepository->findBy([
-                "user" => $this->getUser()
-            ])
+            'tasks' => $tasks
         ]);
     }
 
