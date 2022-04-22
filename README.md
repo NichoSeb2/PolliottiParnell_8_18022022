@@ -30,7 +30,7 @@ To load provided samples data : `php bin/console doctrine:fixtures:load --group=
 
 ## Secure your site
 ### Admin access 
-By default, you can log as admin with : `Administrator / Password`
+By default, you can log as admin with : `Administrateur / Password`
 
 ### Other users
 Samples data come with 2 additional users :
