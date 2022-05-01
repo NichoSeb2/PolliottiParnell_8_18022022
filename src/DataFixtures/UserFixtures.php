@@ -49,11 +49,12 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface, FixtureGr
 		$this->addReference(self::ANONYMOUS_REFERENCE, $anonymous);
 		$manager->persist($anonymous);
 
-		$user = (new User())
+		$user = new User();
+		$user
 			->setUsername("John Doe")
 			->setEmail("john.doe@example.com")
 			->setPassword($this->passwordEncoder->hashPassword(
-				$admin,
+				$user,
 				"Password"
 			))
 			->setRoles(["ROLE_USER"])
